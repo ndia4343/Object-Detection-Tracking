@@ -37,7 +37,13 @@ if uploaded_file is not None:
     
     if st.button("Initialize Processing"):
         tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
-        tfile.write(uploaded_file.getvalue())
+        # Process video writing dynamically to save RAM for 2GB+ files
+        uploaded_file.seek(0)
+        while True:
+            chunk = uploaded_file.read(10 * 1024 * 1024)  # 10MB chunks
+            if not chunk:
+                break
+            tfile.write(chunk)
         tfile.close()
 
         cap = cv2.VideoCapture(tfile.name)
