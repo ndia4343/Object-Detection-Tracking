@@ -35,11 +35,11 @@ model = load_model()
 if uploaded_file is not None:
     st.info("File verification successful. Proceeding to initialize deep learning tracking protocol.")
     
-    tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
-    tfile.write(uploaded_file.read())
-    tfile.close()
-
     if st.button("Initialize Processing"):
+        tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
+        tfile.write(uploaded_file.getvalue())
+        tfile.close()
+
         cap = cv2.VideoCapture(tfile.name)
         if not cap.isOpened():
             st.error("Failed to process the uploaded video feed format.")
